@@ -6,6 +6,6 @@ Convert in-game screenshots from Red Dead Redemption 2 into JPG photos. There is
 
 ## Usage
 
-- Source Folder: Typically, it's located in Documents\Rockstar Games\Red Dead Redemption 2\Profiles\<Hexadecimal ID>\ folder.
-- Output Folder: Choose any folder of your preference; it doesn’t matter where.
+- Source Folder: Typically, it's located in `Documents\Rockstar Games\Red Dead Redemption 2\Profiles\<Hexadecimal ID>\` folder.
+- Output Folder: Choose any folder.
 - After selecting both the source and output folders, click the "Start Converting" button.
