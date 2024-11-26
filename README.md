@@ -1,6 +1,6 @@
 # RDR2 Image Converter
 
-![image](https://github.com/user-attachments/assets/a40c3483-a077-4834-afa9-d39b55f0a935)
+[![Guide Video Thumbnail](https://github.com/user-attachments/assets/f8a53730-5d17-46f6-bff2-78f38718a665)](http://www.youtube.com/watch?v=XVhGke_cSGw "Guide Video")
 
 Convert in-game screenshots from Red Dead Redemption 2 into JPG photos. There is no need to use Rockstar Social Club.
 
