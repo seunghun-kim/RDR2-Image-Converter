@@ -5,29 +5,113 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RDR2_Image_Converter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="750" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" MinWidth="100"/>
-            <ColumnDefinition Width="*" MinWidth="300"/>
-            <ColumnDefinition Width="Auto" MinWidth="50"/>
-        </Grid.ColumnDefinitions>
-        
-        <Label Grid.Row="0" Grid.Column="0" Margin="5" Content="Source Directory:"/>
-        <TextBox x:Name="tboxSrcDir" Grid.Row="0" Grid.Column="1" Margin="5"/>
-        <Button x:Name="btnSelectSrcDir" Grid.Row="0" Grid.Column="2" Margin="5" Content="..." Click="btnSelectSrcDir_Click"/>
-        
-        <Label Grid.Row="1" Grid.Column="0" Margin="5" Content="Destination Directory:"/>
-        <TextBox x:Name="tboxDstDir" Grid.Row="1" Grid.Column="1" Margin="5"/>
-        <Button x:Name="btnSelectDstDir" Grid.Row="1" Grid.Column="2" Margin="5" Content="..." Click="btnSelectDstDir_Click"/>
 
-        <Button x:Name="btnStartConv" Grid.Row="2" Grid.ColumnSpan="3" Margin="5" Padding="5" Content="Start Converting" Click="btnStartConv_Click"/>
-        <TextBox x:Name="tboxConvLog" Grid.Row="3" Grid.ColumnSpan="3" Margin="5" VerticalAlignment="Stretch" IsReadOnly="True"/>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Source Directory:" Grid.Column="0" Margin="5"/>
+            <TextBox x:Name="tboxSrcDir" Grid.Column="1" Margin="5" TextChanged="tboxSrcDir_TextChanged"/>
+            <Button Name="btnDetectSrcDir" Content="Detect" Click="btnDetectSrcDir_Click" Grid.Column="2" Margin="5"/>
+            <Button x:Name="btnSelectSrcDir" Content="..." Click="btnSelectSrcDir_Click" Grid.Column="3" Margin="5"/>
+        </Grid>
+
+        <Button Name="btnShowImages" Content="Show Images" IsEnabled="False"
+                Grid.Row="1" Margin="5" Padding="5" Click="btnShowImages_Click"/>
+
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Images found" Grid.Row="0" Grid.Column="0" Margin="5,0,0,0"/>
+            <Label Content="Images to convert" Grid.Row="0" Grid.Column="2" Margin="5,0,0,0"/>
+
+            <ListView Name="lvImages" Grid.Column="0" Grid.Row="1" Margin="5" ItemsSource="{Binding ImageItems}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="50">
+                            <GridViewColumn.Header>
+                                <CheckBox x:Name="chkSelectAll" Content="All" Click="chkSelectAll_Click"/>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Checked="UpdateButtonStates" Unchecked="UpdateButtonStates"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Image">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding ImagePath}" Height="100" Width="Auto"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1">
+                <Button x:Name="btnAddToConvQueue" Content="&gt;&gt;&gt;" IsEnabled="False" HorizontalAlignment="Center" Margin="5" Click="btnAddToConvQueue_Click"/>
+                <Button x:Name="btnRemoveFromConvQueue" Content="&lt;&lt;&lt;" IsEnabled="False" HorizontalAlignment="Center" Margin="5" Click="btnRemoveFromConvQueue_Click"/>
+            </StackPanel>
+            <ListView Name="lvConvertQueue" Grid.Column="2" Grid.Row="1" Margin="5" ItemsSource="{Binding ConvertQueueItems}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="50">
+                            <GridViewColumn.Header>
+                                <CheckBox x:Name="chkSelectAllConvQueue" Content="All" Click="chkSelectAllConvQueue_Click"/>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsSelectedConvQueue, Mode=TwoWay}" Checked="UpdateButtonStates" Unchecked="UpdateButtonStates"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Image">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding ImagePathConvQueue}" Height="100" Width="Auto"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Content="Destination Directory:" Grid.Column="0" Margin="5"/>
+            <TextBox x:Name="tboxDstDir" Grid.Column="1" Margin="5" TextChanged="tboxDstDir_TextChanged"/>
+            <Button x:Name="btnSelectDstDir" Content="..." Click="btnSelectDstDir_Click" Grid.Column="2" Margin="5"/>
+        </Grid>
+
+        <Button x:Name="btnStartConv" Content="Start Converting" Click="btnStartConv_Click" IsEnabled="False"
+                Grid.Row="4" Grid.ColumnSpan="4" Margin="5" Padding="5"/>
+        <TextBox x:Name="tboxConvLog" IsReadOnly="True"
+                 Grid.Row="5" Grid.ColumnSpan="4" Margin="5" MinHeight="100" VerticalAlignment="Stretch"/>
     </Grid>
 </Window>
