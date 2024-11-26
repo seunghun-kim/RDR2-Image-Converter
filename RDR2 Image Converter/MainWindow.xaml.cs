@@ -277,6 +277,8 @@ namespace RDR2_Image_Converter
                     image.Dispose();
                 }
             }
+
+            tboxConvLog.Text += $"Found {ImageItems.Count} images in source directory.\n";
         }
 
         private void btnAddToConvQueue_Click(object sender, RoutedEventArgs e)
@@ -379,6 +381,23 @@ namespace RDR2_Image_Converter
         private void tboxDstDir_TextChanged(object sender, TextChangedEventArgs e)
         {
             btnStartConv.IsEnabled = !string.IsNullOrEmpty(tboxDstDir.Text);
+        }
+        private void lvImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (ImageItem item in e.AddedItems)
+            {
+                ConvertQueueItems.Add(new ImageItem { IsSelectedConvQueue = false, ImagePathConvQueue = item.ImagePath });
+                ImageItems.Remove(item);
+            }
+        }
+
+        private void lvConvertQueue_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (ImageItem item in e.AddedItems)
+            {
+                ImageItems.Add(new ImageItem { IsSelected = false, ImagePath = item.ImagePathConvQueue });
+                ConvertQueueItems.Remove(item);
+            }
         }
     }
     public class ImageItem : INotifyPropertyChanged
